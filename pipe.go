@@ -1,7 +1,6 @@
 package down
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 
@@ -20,7 +19,7 @@ func (t *pipeDownloader) Download(url string) (Blob, error) {
 
 	if code := response.StatusCode; code != status.OK {
 		response.Body.Close()
-		return nil, fmt.Errorf("cannot download file %s, reason: HTTP %d", url, code)
+		return nil, newError(url, code)
 	}
 
 	return &pipeBlob{url, response.Body}, nil

@@ -1,7 +1,6 @@
 package down
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -31,7 +30,7 @@ func (t *fileDownloader) Download(url string) (Blob, error) {
 	defer response.Body.Close()
 
 	if code := response.StatusCode; code != status.OK {
-		return nil, fmt.Errorf("cannot download file %s, reason: HTTP %d", url, code)
+		return nil, newError(url, code)
 	}
 
 	_, err = io.Copy(file, response.Body)
