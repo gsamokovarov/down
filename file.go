@@ -10,13 +10,13 @@ import (
 	"github.com/SuperLinearity/rhyme-app/be/shared/httputil/status"
 )
 
-type tempfileDownloader struct {
-	tempDir string
-	client  *http.Client
+type fileDownloader struct {
+	dir    string
+	client *http.Client
 }
 
-func (t *tempfileDownloader) Download(url string) (Blob, error) {
-	location := path.Join(t.tempDir, path.Base(url))
+func (t *fileDownloader) Download(url string) (Blob, error) {
+	location := path.Join(t.dir, path.Base(url))
 
 	file, err := os.Create(location)
 	if err != nil {
@@ -39,27 +39,27 @@ func (t *tempfileDownloader) Download(url string) (Blob, error) {
 		return nil, err
 	}
 
-	return newTempfileBlob(location)
+	return newFileBlob(location)
 }
 
-func newTempfileBlob(location string) (Blob, error) {
+func newFileBlob(location string) (Blob, error) {
 	file, err := os.Open(location)
 	if err != nil {
 		return nil, err
 	}
 
-	return &tempfileBlob{location, file}, nil
+	return &fileBlob{location, file}, nil
 }
 
-type tempfileBlob struct {
+type fileBlob struct {
 	path string
 	file *os.File
 }
 
-func (t *tempfileBlob) Read(p []byte) (int, error) { return t.file.Read(p) }
-func (t *tempfileBlob) Close() error               { return t.file.Close() }
-func (t *tempfileBlob) Location() string           { return t.path }
-func (t *tempfileBlob) Release() error {
+func (t *fileBlob) Read(p []byte) (int, error) { return t.file.Read(p) }
+func (t *fileBlob) Close() error               { return t.file.Close() }
+func (t *fileBlob) Location() string           { return t.path }
+func (t *fileBlob) Release() error {
 	if err := t.file.Close(); err != nil {
 		return err
 	}

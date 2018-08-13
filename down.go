@@ -3,7 +3,6 @@ package down
 import (
 	"io"
 	"net/http"
-	"os"
 )
 
 // Downloader downloads an URL into a Blob.
@@ -19,9 +18,9 @@ type Blob interface {
 	Release() error
 }
 
-// NewTempfileDownloader downloads an URL to a temporary file.
-func NewTempfileDownloader(option ...*http.Client) Downloader {
-	return &tempfileDownloader{os.TempDir(), getOptionalHTTPClient(option...)}
+// NewFileDownloader downloads an URL to a temporary file.
+func NewFileDownloader(dir string, option ...*http.Client) Downloader {
+	return &fileDownloader{dir, getOptionalHTTPClient(option...)}
 }
 
 // NewPipeDownloader downloads an URL on demand.
