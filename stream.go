@@ -15,7 +15,7 @@ func (t *streamDownloader) Download(url string) (Blob, error) {
 		return nil, err
 	}
 
-	if code := response.StatusCode; successfulHTTP(code) {
+	if code := response.StatusCode; !successfulHTTP(code) {
 		response.Body.Close()
 		return nil, newError(url, code)
 	}

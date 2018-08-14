@@ -27,7 +27,7 @@ func (t *fileDownloader) Download(url string) (Blob, error) {
 	}
 	defer response.Body.Close()
 
-	if code := response.StatusCode; successfulHTTP(code) {
+	if code := response.StatusCode; !successfulHTTP(code) {
 		return nil, newError(url, code)
 	}
 
