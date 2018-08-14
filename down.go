@@ -31,10 +31,10 @@ func NewFileDownloader(dir string, client ...*http.Client) Downloader {
 	return &fileDownloader{dir, getOptionalHTTPClient(client...)}
 }
 
-// NewPipeDownloader downloads an URL on demand. This downloader won't save the
+// NewStreamDownloader downloads an URL on demand. This downloader won't save the
 // file on disk, but will stream it directly as the blob is read. Can be used
 // to download a remote file from one location and upload it to another remote
 // one.
-func NewPipeDownloader(client ...*http.Client) Downloader {
-	return &pipeDownloader{getOptionalHTTPClient(client...)}
+func NewStreamDownloader(client ...*http.Client) Downloader {
+	return &streamDownloader{getOptionalHTTPClient(client...)}
 }
