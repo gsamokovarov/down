@@ -3,8 +3,6 @@ package down
 import (
 	"io"
 	"net/http"
-
-	"github.com/SuperLinearity/rhyme-app/be/shared/httputil/status"
 )
 
 type streamDownloader struct {
@@ -17,7 +15,7 @@ func (t *streamDownloader) Download(url string) (Blob, error) {
 		return nil, err
 	}
 
-	if code := response.StatusCode; code != status.OK {
+	if code := response.StatusCode; successfulHTTP(code) {
 		response.Body.Close()
 		return nil, newError(url, code)
 	}

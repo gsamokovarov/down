@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"os"
 	"path"
-
-	"github.com/SuperLinearity/rhyme-app/be/shared/httputil/status"
 )
 
 type fileDownloader struct {
@@ -29,7 +27,7 @@ func (t *fileDownloader) Download(url string) (Blob, error) {
 	}
 	defer response.Body.Close()
 
-	if code := response.StatusCode; code != status.OK {
+	if code := response.StatusCode; successfulHTTP(code) {
 		return nil, newError(url, code)
 	}
 
