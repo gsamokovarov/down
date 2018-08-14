@@ -12,6 +12,10 @@ type Downloader interface {
 
 // Blob is a downloaded file. It can be physically stored on disk or streamed
 // remotely as being read.
+//
+// Once done Read-ing the blob make sure to either Close or Release it. Close
+// will close the file, while Release will clean it up (delete it) if its
+// already stored.
 type Blob interface {
 	io.ReadCloser
 
